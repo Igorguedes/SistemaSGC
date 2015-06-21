@@ -5,8 +5,8 @@
  */
 package br.GuedesDesenvolvimento.SistemaSGC.Dados;
 
-import br.GuedesDesenvolvimento.SistemaSGC.Entidade.Compra;
-import br.GuedesDesenvolvimento.SistemaSGC.Entidade.Produto;
+import br.GuedesDesenvolvimento.SistemaSGC.Entidade.Criptografia;
+import br.GuedesDesenvolvimento.SistemaSGC.Entidade.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,23 +18,26 @@ import java.util.List;
  *
  * @author Igor
  */
-public class CompraDAO {
+public class UsuarioDAO {
 
-    private static final String SQL_INSERT = "INSERT INTO COMPRA (VALORTOTAL, DATA, CLIENTE,PRODUTO) VALUES ( ?, ?, ?,?)";
-    private static final String SQL_SELECT_TODOS = "SELECT CODIGO, VALORTOTAL,DATA,CLIENTE, PRODUTO FROM COMPRA ";
+    private static final String SQL_INSERT = "INSERT INTO USUARIO    (NOME, CPF ,SENHA ) VALUES (  ?, ?,?)";
+    private static final String SQL_SELECT_TODOS = "SELECT CODIGO, NOME,CPF,SENHA FROM USUARIO ";
+    
 
-    public void criar(Compra compra) throws SQLException {
+    public void criar(Usuario usuario) throws SQLException {
         Connection conexao = null;
         PreparedStatement comando = null;
-        ResultSet resultado = null;
+        
+        Criptografia criptografia = new Criptografia();
 
         try {
 
             conexao = BancoDadosUtil.getConnection();
             comando = conexao.prepareStatement(SQL_INSERT);
 
-            comando.setDouble(1, compra.getValorTotal());
-            comando.setString(2, compra.getDataFormatadaBanco());
+            comando.setString(1, usuario.getNome());
+            comando.setString(2, usuario.getCPF());
+            comando.setString(3, criptografia.criptografiaSHA(usuario.getSenha()));
 
             comando.execute();
             conexao.commit();
@@ -52,40 +55,29 @@ public class CompraDAO {
                 conexao.close();
             }
         }
-
     }
 
-    public List<Compra> buscarCompras() throws SQLException {
-        List<Compra> compras = new ArrayList<>();
+    public List<Usuario> buscarTodos() throws SQLException {
+        List<Usuario> usuarios = new ArrayList<>();
+
         Connection conexao = null;
         PreparedStatement comando = null;
         ResultSet resultado = null;
-        List<Produto> produtos = new ArrayList<Produto>();
-        Compra compra;
-
+        Usuario usuario = null;
         try {
-
             conexao = BancoDadosUtil.getConnection();
             comando = conexao.prepareStatement(SQL_SELECT_TODOS);
             resultado = comando.executeQuery();
 
             while (resultado.next()) {
-                ProdutoDAO produtoDAO = new ProdutoDAO();
-                ClienteDAO clienteDAO = new ClienteDAO();
+                usuario = new Usuario();
 
-                compra = new Compra();
-                compra.setCodigo(resultado.getInt(1));
-                compra.setValorTotal(resultado.getDouble(2));
-                compra.setData(resultado.getDate(3));
-
-                compra.setCliente(clienteDAO.buscarCliente());
-                produtos = produtoDAO.buscarTodos();
-
-                compra.setProdutos(produtos);
-                compras.add(compra);
-
+                usuario.setCodigo(resultado.getInt(1));
+                usuario.setNome(resultado.getString(2));
+                usuario.setCPF(resultado.getString(3));
+                usuario.setSenha(resultado.getString(4));
+                usuarios.add(usuario);
             }
-
         } catch (Exception e) {
 
             if (conexao != null) {
@@ -100,7 +92,7 @@ public class CompraDAO {
                 conexao.close();
             }
         }
-        return compras;
+        return usuarios;
     }
-
+    
 }

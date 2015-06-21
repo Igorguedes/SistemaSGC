@@ -22,6 +22,7 @@ public class Compra {
     private double valorTotal;
     private Date data;
     
+    
     private List <Produto> produtos;
 
     public int getCodigo() {
@@ -66,13 +67,25 @@ public class Compra {
     
     public String getDataFormatadaBanco(){
         String data;
-        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dt = new SimpleDateFormat("dd-MM-yyyy");
         data = dt.format(this.data);
         return data;
     }
    public void addProdutos(Produto produto){
        this.produtos.add(produto);
    }
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
+    }
+   public void setData() {
+        this.data = new java.sql.Date(System.currentTimeMillis());
+    }
+   
     
     
 }

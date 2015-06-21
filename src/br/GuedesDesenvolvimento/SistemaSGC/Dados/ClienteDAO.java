@@ -33,11 +33,11 @@ public class ClienteDAO {
             comando = conexao.prepareStatement(SQL_INSERT);
 
             comando.setString(1, cliente.getNome());
-            
+
             comando.setString(2, cliente.getTelefone());
             comando.setString(3, cliente.getCPF());
             comando.setString(4, cliente.getEndereco());
-            
+
             comando.execute();
 
             conexao.commit();
@@ -58,6 +58,7 @@ public class ClienteDAO {
             }
         }
     }
+
     public List<Cliente> buscarTodos() throws SQLException {
         Connection conexao = null;
         PreparedStatement comando = null;
@@ -72,10 +73,11 @@ public class ClienteDAO {
 
             while (resultado.next()) {
                 Cliente cliente = new Cliente();
-                cliente.setNome(resultado.getString(1));
-                cliente.setTelefone(resultado.getString(2));
-                cliente.setCPF(resultado.getString(3));
-                cliente.setEndereco(resultado.getString(4));
+                cliente.setCodigo(resultado.getInt(1));
+                cliente.setNome(resultado.getString(2));
+                cliente.setTelefone(resultado.getString(3));
+                cliente.setCPF(resultado.getString(4));
+                cliente.setEndereco(resultado.getString(5));
 
                 clientes.add(cliente);
             }
@@ -95,6 +97,39 @@ public class ClienteDAO {
         return clientes;
     }
 
-    
-    
+    public Cliente buscarCliente() throws SQLException {
+        Cliente cliente= new Cliente();
+        Connection conexao = null;
+        PreparedStatement comando = null;
+        ResultSet resultado = null;
+        try {
+
+            conexao = BancoDadosUtil.getConnection();
+            comando = conexao.prepareStatement(SQL_SELECT_TODOS);
+
+            if (resultado.next()) {
+
+                cliente.setCodigo(resultado.getInt(1));
+                cliente.setNome(resultado.getString(2));
+                cliente.setTelefone(resultado.getString(3));
+                cliente.setCPF(resultado.getString(4));
+                cliente.setEndereco(resultado.getString(5));
+
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (resultado != null && !resultado.isClosed()) {
+                resultado.close();
+            }
+            if (comando != null && !comando.isClosed()) {
+                comando.close();
+            }
+            if (conexao != null && !conexao.isClosed()) {
+                conexao.close();
+            }
+        }
+        return cliente;
+    }
+
 }

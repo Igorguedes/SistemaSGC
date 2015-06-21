@@ -22,8 +22,7 @@ public class ProdutoDAO {
 
     private static final String SQL_INSERT = "INSERT INTO PRODUTO (NOME, PRECO, QUANTIDADE) VALUES ( ?, ?, ?)";
     private static final String SQL_SELECT_TODOS = "SELECT CODIGO, NOME, PRECO, QUANTIDADE FROM PRODUTO ";
-    private static final String SQL_RECUPERA_CODIGO = "SELECT MAX(CODIGO) FROM PRODUTO";
-
+    
     public void criar(Produto produto) throws SQLException {
         Connection conexao = null;
         PreparedStatement comando = null;
@@ -74,6 +73,7 @@ public class ProdutoDAO {
 
             while (resultado.next()) {
                 Produto produto = new Produto();
+                produto.setCodigo(resultado.getInt(1));
                 produto.setNome(resultado.getString(2));
                 produto.setPreco(resultado.getDouble(3));
                 produto.setQuantidade(resultado.getInt(4));

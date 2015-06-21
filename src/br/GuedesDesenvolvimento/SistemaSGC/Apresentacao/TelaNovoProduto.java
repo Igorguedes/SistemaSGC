@@ -21,6 +21,7 @@ public class TelaNovoProduto extends javax.swing.JFrame {
      * Creates new form TelaNovoProduto
      */
     private Produto produto;
+
     public TelaNovoProduto() {
         initComponents();
     }
@@ -45,7 +46,9 @@ public class TelaNovoProduto extends javax.swing.JFrame {
         btnVoltar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Cadastrar produto");
         setAlwaysOnTop(true);
+        setExtendedState(6);
 
         pnlNovoProduto.setBorder(javax.swing.BorderFactory.createTitledBorder("Cadastrar Produtos"));
 
@@ -121,24 +124,18 @@ public class TelaNovoProduto extends javax.swing.JFrame {
                 .addGroup(pnlNovoProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar)
                     .addComponent(btnVoltar))
-                .addContainerGap(87, Short.MAX_VALUE))
+                .addContainerGap(109, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pnlNovoProduto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(pnlNovoProduto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pnlNovoProduto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(pnlNovoProduto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -149,47 +146,63 @@ public class TelaNovoProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPrecoActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        try{
-            lerDadosTela();
-            ProdutoBO produtoBO= new ProdutoBO();
-            produtoBO.novoProduto(this.produto);
-            exibirMensagemSucesso();
-        }catch(Exception e){
+        boolean status;
+        try {
+            status = lerDadosTela();
+            if (status == true) {
+                ProdutoBO produtoBO = new ProdutoBO();
+                produtoBO.novoProduto(this.produto);
+                exibirMensagemSucesso();
+            }
+        } catch (Exception e) {
             exibirMensagemErro();
             e.printStackTrace();
         }
-        
+        limparCamposTela();
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
-    
-    public void lerDadosTela() throws ParseException {
+    public boolean lerDadosTela() throws ParseException {
         produto = new Produto();
 
-        produto.setNome(txtNome.getText().trim());
-
+        String nome = txtNome.getText().trim();
         String preco = txtPreco.getText();
-        DecimalFormat formatador = new DecimalFormat("#,##0.00");
-        produto.setPreco(formatador.parse(preco).doubleValue());
+        String quantidade = txtQuantidade.getText();
+        if (nome.isEmpty() || preco.isEmpty() || quantidade.isEmpty()) {
+            
+            JOptionPane.showMessageDialog(this, "Impossivel cadastrar com algum dos campos estando vazios!", "Erro ao cadastrar produto", JOptionPane.ERROR_MESSAGE);
+            return false;
+            
+        } else {
+            produto.setNome(txtNome.getText().trim());
+            DecimalFormat formatador = new DecimalFormat("#,##0.00");
+            produto.setPreco(formatador.parse(preco).doubleValue());
+            produto.setQuantidade(Integer.parseInt(quantidade));
+            return true;
 
-        String quantidade= txtQuantidade.getText();
-        produto.setQuantidade(Integer.parseInt(quantidade));
-        
-        
+        }
+
     }
-    
-    private void exibirMensagemErro(){
-        String titulo="Erro ao cadastrar produto!";
-        String mensagem="Erro desconhecido. Consulte o administrador do sistema!";
-        JOptionPane.showMessageDialog(this, mensagem, titulo, JOptionPane.ERROR_MESSAGE);  
-    } 
+
+    private void exibirMensagemErro() {
+        String titulo = "Erro ao cadastrar produto!";
+        String mensagem = "Erro desconhecido. Consulte o administrador do sistema!";
+        JOptionPane.showMessageDialog(this, mensagem, titulo, JOptionPane.ERROR_MESSAGE);
+    }
+
     private void exibirMensagemSucesso() {
         String titulo = "Cadastrar produto!";
         String mensagem = "Produto cadastrado com sucesso!";
         JOptionPane.showMessageDialog(this, mensagem, titulo, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void limparCamposTela() {
+        txtNome.setText("");
+        txtPreco.setText("");
+        txtQuantidade.setText("");
     }
 
     /**

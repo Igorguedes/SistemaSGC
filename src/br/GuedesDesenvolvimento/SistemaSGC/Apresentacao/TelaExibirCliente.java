@@ -71,8 +71,10 @@ public class TelaExibirCliente extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Sistema de Cadastro de Compras");
         setAlwaysOnTop(true);
+        setExtendedState(6);
 
         pnlExibirClientes.setBorder(javax.swing.BorderFactory.createTitledBorder("Clientes Cadastrados"));
+        pnlExibirClientes.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         tblClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -107,45 +109,37 @@ public class TelaExibirCliente extends javax.swing.JFrame {
         pnlExibirClientes.setLayout(pnlExibirClientesLayout);
         pnlExibirClientesLayout.setHorizontalGroup(
             pnlExibirClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlExibirClientesLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(pnlExibirClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlExibirClientesLayout.createSequentialGroup()
-                        .addComponent(btnExcluir)
-                        .addGap(29, 29, 29)
-                        .addComponent(btnAlterar)
-                        .addGap(45, 45, 45)
-                        .addComponent(btnVoltar))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAlterar)
+                .addGap(36, 36, 36)
+                .addComponent(btnExcluir)
+                .addGap(30, 30, 30)
+                .addComponent(btnVoltar)
+                .addGap(44, 44, 44))
         );
         pnlExibirClientesLayout.setVerticalGroup(
             pnlExibirClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlExibirClientesLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlExibirClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnExcluir)
+                    .addComponent(btnVoltar)
                     .addComponent(btnAlterar)
-                    .addComponent(btnVoltar))
-                .addGap(205, 205, 205))
+                    .addComponent(btnExcluir))
+                .addGap(41, 41, 41))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pnlExibirClientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(pnlExibirClientes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pnlExibirClientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(pnlExibirClientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -203,9 +197,9 @@ public class TelaExibirCliente extends javax.swing.JFrame {
             } else if (Column == 1) {
                 return "Nome";
             } else if (Column == 2) {
-                return "Telefone";
-            } else if (Column == 3) {
                 return "CPF";
+            } else if (Column == 3) {
+                return "Telefone";
             } else {
                 return "Endereco";
             }
@@ -231,9 +225,9 @@ public class TelaExibirCliente extends javax.swing.JFrame {
         } else if (coluna == 1) {
             return cliente.getNome();
         } else if (coluna == 2) {
-            return cliente.getTelefone();
-        } else if (coluna == 3) {
             return cliente.getCPF();
+        } else if (coluna == 3) {
+            return cliente.getTelefone();
         } else {
             return cliente.getEndereco();
         }

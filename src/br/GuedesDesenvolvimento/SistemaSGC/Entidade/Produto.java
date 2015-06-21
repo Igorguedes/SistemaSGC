@@ -22,7 +22,7 @@ public class Produto {
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
-    
+
     public int getCodigo() {
         return codigo;
     }
@@ -46,6 +46,10 @@ public class Produto {
     public void setPreco(double preco) {
         this.preco = preco;
     }
-    
-    
+
+ 
+    @Override
+ public String toString(){
+     return this.getNome();
+ }
 }
