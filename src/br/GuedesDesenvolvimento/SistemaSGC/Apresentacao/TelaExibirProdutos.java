@@ -25,7 +25,6 @@ public class TelaExibirProdutos extends javax.swing.JFrame {
      * Creates new form TelaExibirProdutos
      */
     private List<Produto> produtos;
-    
 
     public TelaExibirProdutos() throws SQLException {
         initComponents();
@@ -70,8 +69,18 @@ public class TelaExibirProdutos extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tblProdutosCadastrados);
 
         btnAlterar.setText("Alterar");
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarActionPerformed(evt);
+            }
+        });
 
         btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         btnVoltar.setText("Voltar");
         btnVoltar.addActionListener(new java.awt.event.ActionListener() {
@@ -123,27 +132,56 @@ public class TelaExibirProdutos extends javax.swing.JFrame {
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
-    public void ExibirDadosTabela() throws SQLException{
-        try{
-        carregarListaProdutos();
-        ModelosTabelaProdutos modelosTabelaProdutos= new ModelosTabelaProdutos();
-        tblProdutosCadastrados.setModel(modelosTabelaProdutos);
-        }catch( Exception e){
+
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+        int linhaSelecionada = tblProdutosCadastrados.getSelectedRow();
+
+        if (linhaSelecionada < 0) {
+            JOptionPane.showMessageDialog(this, "Nenhum produto selecionado!", "Erro!", JOptionPane.ERROR_MESSAGE);
+        }else{
+            Produto produtoSelecionado =produtos.get(linhaSelecionada);
+            TelaEditarProduto telaEditarProduto= new TelaEditarProduto(produtoSelecionado);
+            telaEditarProduto.setVisible(true);
+        }
+    }//GEN-LAST:event_btnAlterarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        int linhaSelecionada= tblProdutosCadastrados.getSelectedRow();
+        Produto produtoSelecionado=produtos.get(linhaSelecionada);
+               
+        String mensagem="Deseja excluir? "+produtoSelecionado.getNome();
+        String titulo="Excluir";
+        int resultado= JOptionPane.showConfirmDialog(this, mensagem, titulo, JOptionPane.YES_NO_OPTION); 
+        if(resultado==JOptionPane.YES_OPTION){
+            JOptionPane.showMessageDialog(this, "Sim");
+        }else if(resultado==JOptionPane.NO_OPTION){
+            JOptionPane.showMessageDialog(this, "Não");
+        }
+        
+    }//GEN-LAST:event_btnExcluirActionPerformed
+    public void ExibirDadosTabela() throws SQLException {
+        try {
+            carregarListaProdutos();
+            ModelosTabelaProdutos modelosTabelaProdutos = new ModelosTabelaProdutos();
+            tblProdutosCadastrados.setModel(modelosTabelaProdutos);
+        } catch (Exception e) {
             exibirMensagemErro();
             e.printStackTrace();
         }
     }
-    
+
     private void exibirMensagemErro() {
         String titulo = "Erro!";
         String mensagem = "Erro ao carregar Produtos!";
         JOptionPane.showMessageDialog(this, mensagem, titulo, JOptionPane.ERROR_MESSAGE);
     }
-    public void carregarListaProdutos() throws SQLException{
+
+    public void carregarListaProdutos() throws SQLException {
         ProdutoBO produtoBO = new ProdutoBO();
-        this.produtos=produtoBO.buscarProdutos();
-        
+        this.produtos = produtoBO.buscarProdutos();
+
     }
+
     /**
      * @param args the command line arguments
      */

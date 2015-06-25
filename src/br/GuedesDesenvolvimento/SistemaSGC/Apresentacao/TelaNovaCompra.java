@@ -9,6 +9,7 @@ import br.GuedesDesenvolvimento.SistemaSGC.Entidade.Cliente;
 import br.GuedesDesenvolvimento.SistemaSGC.Entidade.Compra;
 import br.GuedesDesenvolvimento.SistemaSGC.Entidade.Produto;
 import br.GuedesDesenvolvimento.SistemaSGC.Negocio.ClienteBO;
+import br.GuedesDesenvolvimento.SistemaSGC.Negocio.CompraBO;
 import br.GuedesDesenvolvimento.SistemaSGC.Negocio.ProdutoBO;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -31,21 +32,27 @@ public class TelaNovaCompra extends javax.swing.JFrame {
     List<Cliente> clientes;
     int linhaSelecionada;
     List<Compra> produtosSelecionados;
-    Compra compra= new Compra();
+    Compra compra = new Compra();
+    double soma;
+    
     public TelaNovaCompra() {
         initComponents();
-
         try {
             compra.setData();
             this.txtData.setText(compra.getDataFormatadaBanco());
             
-            carregarProdutos();
-            carregarClientes();
-            ExibirDadosTabela();
             produtosSelecionados = new ArrayList<>();
-        } catch (Exception e) {
-            e.printStackTrace();
+            carregarClientes();
+            carregarProdutos();
+            ExibirDadosTabela();
+            this.soma=0;
+            txtValorTotal.setText(String.valueOf(valorTotalCompra()));
+            this.cmbProdutos.setSelectedItem(null);
+             this.cmbClientes.setSelectedItem(null);
+        } catch (SQLException ex) {
+            Logger.getLogger(TelaNovaCompra.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     /**
@@ -93,6 +100,11 @@ public class TelaNovaCompra extends javax.swing.JFrame {
 
         txtValorTotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
         txtValorTotal.setToolTipText("");
+        txtValorTotal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtValorTotalActionPerformed(evt);
+            }
+        });
 
         cmbProdutos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -149,6 +161,11 @@ public class TelaNovaCompra extends javax.swing.JFrame {
         });
 
         btnSalvarCompras.setText("Salvar");
+        btnSalvarCompras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarComprasActionPerformed(evt);
+            }
+        });
 
         btnAddProduto.setText("Adicionar");
         btnAddProduto.addActionListener(new java.awt.event.ActionListener() {
@@ -242,43 +259,74 @@ public class TelaNovaCompra extends javax.swing.JFrame {
 
     private void cmbProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProdutosActionPerformed
 
-        try {
-            carregarProdutos();
-        } catch (Exception ex) {
-            String mensagem = "Erro ao carregar Produtos!";
-            exibirMensagemErro(mensagem);
-            ex.printStackTrace();
-        }
+        
     }//GEN-LAST:event_cmbProdutosActionPerformed
 
     private void btnAddProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProdutoActionPerformed
+       
         carregarProdutosSelecionados();
+        try {
+            ExibirDadosTabela();
+        } catch (SQLException ex) {
+            Logger.getLogger(TelaNovaCompra.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnAddProdutoActionPerformed
 
     private void cmbClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClientesActionPerformed
-        try {
-            carregarClientes();
-        } catch (SQLException ex) {
-            exibirMensagemErro("Erro ao carregar clientes!");
-            ex.printStackTrace();
-        }
+       
     }//GEN-LAST:event_cmbClientesActionPerformed
 
     private void txtDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDataActionPerformed
-        
+
     }//GEN-LAST:event_txtDataActionPerformed
 
-    public void carregarProdutosSelecionados() {
-        Compra compra = new Compra();
-        compra.setProduto((Produto) this.cmbProdutos.getSelectedItem());
-        this.produtosSelecionados.add(compra);
+    private void txtValorTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValorTotalActionPerformed
+        
+        
+    }//GEN-LAST:event_txtValorTotalActionPerformed
 
+    private void btnSalvarComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarComprasActionPerformed
+        try {
+            compra.setData();
+            this.txtData.setText(compra.getDataFormatadaBanco());
+
+            carregarClienteSelecionado();
+            CompraBO compraBO= new CompraBO();
+            compraBO.criar(compra);
+            exibirMensagemSucesso("Compra efetuada com sucesso!");
+        } catch (Exception e) {
+            exibirMensagemErro("Erro ao efetuar Compra!");
+            e.printStackTrace();
+            
+        }
+    }//GEN-LAST:event_btnSalvarComprasActionPerformed
+    public double valorTotalCompra(){
+        Compra produtoCompra= null;
+        
+        for(int i=0;i<produtosSelecionados.size();i++){
+            produtoCompra= produtosSelecionados.get(i);
+            
+            soma=soma+produtoCompra.getProduto().getPreco();
+            compra.setValorTotal(soma);
+            
+        }
+        return compra.getValorTotal();
+    }
+    public void carregarProdutosSelecionados() {
+        this.compra.setProduto((Produto) this.cmbProdutos.getSelectedItem());
+        this.produtosSelecionados.add(this.compra);
+        
+    }
+
+    public void carregarClienteSelecionado(){
+        this.compra.setCliente((Cliente) this.cmbClientes.getSelectedItem());
     }
 
     public void carregarProdutos() throws SQLException {
-
+        
         ProdutoBO produtoBO = new ProdutoBO();
         produtos = produtoBO.buscarProdutos();
+        
         for (int i = 0; i < produtos.size(); i++) {
             Produto produto = null;
             produto = produtos.get(i);
@@ -287,8 +335,10 @@ public class TelaNovaCompra extends javax.swing.JFrame {
     }
 
     public void carregarClientes() throws SQLException {
+       
         ClienteBO clienteBO = new ClienteBO();
         clientes = clienteBO.buscarTodos();
+        
         for (int i = 0; i < clientes.size(); i++) {
             Cliente cliente = null;
             cliente = clientes.get(i);
@@ -301,7 +351,10 @@ public class TelaNovaCompra extends javax.swing.JFrame {
         String titulo = "Erro ao efetuar compra!";
         JOptionPane.showMessageDialog(this, mensagem, titulo, JOptionPane.ERROR_MESSAGE);
     }
-
+    private void exibirMensagemSucesso(String mensagem) {
+        String titulo = "Compra!";
+        JOptionPane.showMessageDialog(this, mensagem, titulo, JOptionPane.INFORMATION_MESSAGE);
+    }
     public void ExibirDadosTabela() throws SQLException {
         try {
             carregarProdutosSelecionados();

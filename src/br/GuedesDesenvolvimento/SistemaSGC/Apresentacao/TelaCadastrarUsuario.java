@@ -19,11 +19,12 @@ public class TelaCadastrarUsuario extends javax.swing.JFrame {
      * Creates new form TelaCadastrarUsuario
      */
     Usuario usuario;
-
+    
     public TelaCadastrarUsuario() {
         initComponents();
         usuario= new Usuario();
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -46,7 +47,9 @@ public class TelaCadastrarUsuario extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastrar usuários");
+        setAlwaysOnTop(true);
         setExtendedState(6);
+        setResizable(false);
 
         pnlNovoUsuario.setBorder(javax.swing.BorderFactory.createTitledBorder("Cadastrar usuários"));
 
@@ -82,26 +85,26 @@ public class TelaCadastrarUsuario extends javax.swing.JFrame {
             pnlNovoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlNovoUsuarioLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnlNovoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlNovoUsuarioLayout.createSequentialGroup()
-                        .addComponent(btnSalvar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnVoltar))
-                    .addGroup(pnlNovoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(pnlNovoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(pnlNovoUsuarioLayout.createSequentialGroup()
-                                .addComponent(lblNome)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(pnlNovoUsuarioLayout.createSequentialGroup()
-                                .addComponent(lblCPF)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(pnlNovoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlNovoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(pnlNovoUsuarioLayout.createSequentialGroup()
-                            .addComponent(lblSenha)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(lblNome)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(pnlNovoUsuarioLayout.createSequentialGroup()
+                            .addComponent(lblCPF)
+                            .addGap(18, 18, 18)
+                            .addComponent(txtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(pnlNovoUsuarioLayout.createSequentialGroup()
+                        .addComponent(lblSenha)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlNovoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlNovoUsuarioLayout.createSequentialGroup()
+                                .addComponent(btnSalvar)
+                                .addGap(54, 54, 54)
+                                .addComponent(btnVoltar))
                             .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         pnlNovoUsuarioLayout.setVerticalGroup(
             pnlNovoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -118,11 +121,11 @@ public class TelaCadastrarUsuario extends javax.swing.JFrame {
                 .addGroup(pnlNovoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSenha)
                     .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                .addGap(27, 27, 27)
                 .addGroup(pnlNovoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSalvar)
-                    .addComponent(btnVoltar))
-                .addContainerGap())
+                    .addComponent(btnVoltar)
+                    .addComponent(btnSalvar))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -204,11 +207,11 @@ public class TelaCadastrarUsuario extends javax.swing.JFrame {
         if ((nome.isEmpty()) || (CPF.isEmpty()) || (senha.isEmpty())) {
             JOptionPane.showMessageDialog(this, "Impossivel cadastrar com algum dos campos estando vazios!", "Erro ao cadastrar usuario", JOptionPane.ERROR_MESSAGE);
             throw new RuntimeException();
-        }
+        }else{
             this.usuario.setNome(txtNome.getText().trim());
             this.usuario.setCPF(txtCPF.getText().trim());
             this.usuario.setSenha(txtSenha.getPassword().toString());
-        
+        }
         
     }
      private void exibirMensagemSucesso() {

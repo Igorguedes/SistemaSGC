@@ -46,5 +46,9 @@ public class CompraBO {
         compras = compraDAO.buscarCompras();
         return compras;
     }
+    public void atualizarDadosCompra(Compra compra) throws SQLException{
+        CompraDAO compraDAO = new CompraDAO();
+        compraDAO.atualizarDados(compra);
+    }
 
 }

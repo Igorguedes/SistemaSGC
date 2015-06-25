@@ -75,11 +75,12 @@ public class TelaInicial extends javax.swing.JFrame {
         mnuExcluirProduto = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         mnuCadastrarCliente = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        mnuAlterarCliente = new javax.swing.JMenuItem();
         mnuExibirCliente = new javax.swing.JMenuItem();
         mnuExcluirCliente = new javax.swing.JMenuItem();
         mnuCompras = new javax.swing.JMenu();
-        jMenuItem5 = new javax.swing.JMenuItem();
+        mnuNovaCompra = new javax.swing.JMenuItem();
+        mnuExibirCompras = new javax.swing.JMenuItem();
 
         jMenu3.setText("File");
         jMenuBar2.add(jMenu3);
@@ -176,6 +177,11 @@ public class TelaInicial extends javax.swing.JFrame {
 
         mnuAlterarProduto.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
         mnuAlterarProduto.setText("Alterar");
+        mnuAlterarProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuAlterarProdutoActionPerformed(evt);
+            }
+        });
         jMenu1.add(mnuAlterarProduto);
 
         mnuExibirProduto.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
@@ -204,9 +210,14 @@ public class TelaInicial extends javax.swing.JFrame {
         });
         jMenu2.add(mnuCadastrarCliente);
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F6, 0));
-        jMenuItem1.setText("Alterar");
-        jMenu2.add(jMenuItem1);
+        mnuAlterarCliente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F6, 0));
+        mnuAlterarCliente.setText("Alterar");
+        mnuAlterarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuAlterarClienteActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mnuAlterarCliente);
 
         mnuExibirCliente.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F7, 0));
         mnuExibirCliente.setText("Exibir");
@@ -225,13 +236,22 @@ public class TelaInicial extends javax.swing.JFrame {
 
         mnuCompras.setText("Carrinho de Compras");
 
-        jMenuItem5.setText("Nova Compra");
-        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+        mnuNovaCompra.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F9, 0));
+        mnuNovaCompra.setText("Nova Compra");
+        mnuNovaCompra.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem5ActionPerformed(evt);
+                mnuNovaCompraActionPerformed(evt);
             }
         });
-        mnuCompras.add(jMenuItem5);
+        mnuCompras.add(mnuNovaCompra);
+
+        mnuExibirCompras.setText("Exibir Compras");
+        mnuExibirCompras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExibirComprasActionPerformed(evt);
+            }
+        });
+        mnuCompras.add(mnuExibirCompras);
 
         jMenuBar1.add(mnuCompras);
 
@@ -259,14 +279,14 @@ public class TelaInicial extends javax.swing.JFrame {
 
     private void mnuCadastrarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCadastrarClienteActionPerformed
         // TODO add your handling code here:
-        TelaNovoCliente telaNovoCliente= new TelaNovoCliente();
+        TelaNovoCliente telaNovoCliente = new TelaNovoCliente();
         telaNovoCliente.setVisible(true);
-                
+
     }//GEN-LAST:event_mnuCadastrarClienteActionPerformed
 
     private void mnuCadastrarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCadastrarProdutoActionPerformed
         // TODO add your handling code here:
-        TelaNovoProduto telaNovoProduto= new TelaNovoProduto();
+        TelaNovoProduto telaNovoProduto = new TelaNovoProduto();
         telaNovoProduto.setVisible(true);
     }//GEN-LAST:event_mnuCadastrarProdutoActionPerformed
 
@@ -283,19 +303,42 @@ public class TelaInicial extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_mnuExibirProdutoActionPerformed
 
-    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+    private void mnuNovaCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNovaCompraActionPerformed
         TelaNovaCompra telaNovaCompra = new TelaNovaCompra();
         telaNovaCompra.setVisible(true);
-    }//GEN-LAST:event_jMenuItem5ActionPerformed
+    }//GEN-LAST:event_mnuNovaCompraActionPerformed
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
         TelaLogin telaLogin = new TelaLogin();
         telaLogin.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnSairActionPerformed
+
+    private void mnuAlterarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAlterarProdutoActionPerformed
+        TelaExibirProdutos telaExibirProdutos;
+        try {
+            telaExibirProdutos = new TelaExibirProdutos();
+            telaExibirProdutos.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_mnuAlterarProdutoActionPerformed
+
+    private void mnuAlterarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAlterarClienteActionPerformed
+
+        TelaExibirCliente telaExibirCliente = new TelaExibirCliente();
+        telaExibirCliente.setVisible(true);
+
+    }//GEN-LAST:event_mnuAlterarClienteActionPerformed
+
+    private void mnuExibirComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExibirComprasActionPerformed
+        TelaExibirCompras telaExibirCompras = new TelaExibirCompras();
+        telaExibirCompras.setVisible(true);
+    }//GEN-LAST:event_mnuExibirComprasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -367,13 +410,12 @@ public class TelaInicial extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar7;
     private javax.swing.JMenuBar jMenuBar8;
     private javax.swing.JMenuBar jMenuBar9;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem mnuAlterarCliente;
     private javax.swing.JMenuItem mnuAlterarProduto;
     private javax.swing.JMenuItem mnuCadastrarCliente;
     private javax.swing.JMenuItem mnuCadastrarProduto;
@@ -381,6 +423,8 @@ public class TelaInicial extends javax.swing.JFrame {
     private javax.swing.JMenuItem mnuExcluirCliente;
     private javax.swing.JMenuItem mnuExcluirProduto;
     private javax.swing.JMenuItem mnuExibirCliente;
+    private javax.swing.JMenuItem mnuExibirCompras;
     private javax.swing.JMenuItem mnuExibirProduto;
+    private javax.swing.JMenuItem mnuNovaCompra;
     // End of variables declaration//GEN-END:variables
 }

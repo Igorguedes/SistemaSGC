@@ -67,7 +67,7 @@ public class Compra {
     
     public String getDataFormatadaBanco(){
         String data;
-        SimpleDateFormat dt = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
         data = dt.format(this.data);
         return data;
     }

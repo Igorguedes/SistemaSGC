@@ -31,4 +31,9 @@ public class ProdutoBO {
         return produtos;
     
     }
+    
+    public void atualizarDadosProduto(Produto produto) throws SQLException {
+        ProdutoDAO produtoDAO = new ProdutoDAO();
+        produtoDAO.atualizarDados(produto);
+    }
 }

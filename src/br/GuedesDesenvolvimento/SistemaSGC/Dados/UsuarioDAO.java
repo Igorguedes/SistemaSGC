@@ -22,13 +22,14 @@ public class UsuarioDAO {
 
     private static final String SQL_INSERT = "INSERT INTO USUARIO    (NOME, CPF ,SENHA ) VALUES (  ?, ?,?)";
     private static final String SQL_SELECT_TODOS = "SELECT CODIGO, NOME,CPF,SENHA FROM USUARIO ";
+    private static final String SQL_UPDATE_DADOS = "UPDATE USUARIO SET  NOME = ?, SENHA=? WHERE CPF = ?";
     
-
+     
     public void criar(Usuario usuario) throws SQLException {
         Connection conexao = null;
         PreparedStatement comando = null;
+
         
-        Criptografia criptografia = new Criptografia();
 
         try {
 
@@ -37,7 +38,7 @@ public class UsuarioDAO {
 
             comando.setString(1, usuario.getNome());
             comando.setString(2, usuario.getCPF());
-            comando.setString(3, criptografia.criptografiaSHA(usuario.getSenha()));
+            comando.setString(3, Criptografia.criptografiaSHA(usuario.getSenha()));
 
             comando.execute();
             conexao.commit();
@@ -94,5 +95,38 @@ public class UsuarioDAO {
         }
         return usuarios;
     }
-    
+
+    public void atualizarDados(Usuario usuario) throws SQLException {
+        PreparedStatement comando = null;
+        Connection conexao = null;
+        
+        
+         try {
+            conexao = BancoDadosUtil.getConnection();
+            comando = conexao.prepareStatement(SQL_UPDATE_DADOS);
+            
+            
+            comando.setString(1, usuario.getNome());
+            comando.setString(2, usuario.getCPF());
+            comando.setString(3, Criptografia.criptografiaSHA(usuario.getSenha()));
+            
+            comando.setInt(4,usuario.getCodigo());
+            
+            comando.execute();
+            conexao.commit();
+        } catch (Exception e) {
+            if (conexao != null) {
+                conexao.rollback();
+            }
+            throw new RuntimeException();
+        } finally {
+            if (comando != null && !comando.isClosed()) {
+                comando.close();
+            }
+            if (conexao != null && !conexao.isClosed()) {
+                conexao.close();
+            }
+        }
+    }
 }
+    

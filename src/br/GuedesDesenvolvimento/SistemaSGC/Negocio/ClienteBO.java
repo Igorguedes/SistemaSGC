@@ -31,4 +31,9 @@ public class ClienteBO {
         return clientes;
     
     }
+    
+     public void atualizarDados(Cliente cliente) throws SQLException{
+      ClienteDAO clienteDAO = new ClienteDAO();  
+      clienteDAO.atualizarDados(cliente);
+    }
 }

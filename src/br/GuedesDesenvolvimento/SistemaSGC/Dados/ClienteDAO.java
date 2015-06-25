@@ -22,6 +22,7 @@ public class ClienteDAO {
 
     private static final String SQL_INSERT = "INSERT INTO CLIENTE (NOME, TELEFONE, CPF, ENDERECO) VALUES ( ?, ?, ?,?)";
     private static final String SQL_SELECT_TODOS = "SELECT CODIGO, NOME,TELEFONE, CPF, ENDERECO FROM CLIENTE ";
+    private static final String SQL_UPDATE_DADOS = "UPDATE CLIENTE SET  NOME = ? ,TELEFONE=? ,CPF=? , ENDERECO = ?  WHERE CODIGO = ? ";
 
     public void criar(Cliente cliente) throws SQLException {
         Connection conexao = null;
@@ -98,7 +99,7 @@ public class ClienteDAO {
     }
 
     public Cliente buscarCliente() throws SQLException {
-        Cliente cliente= new Cliente();
+        Cliente cliente = new Cliente();
         Connection conexao = null;
         PreparedStatement comando = null;
         ResultSet resultado = null;
@@ -130,6 +131,37 @@ public class ClienteDAO {
             }
         }
         return cliente;
+    }
+
+    public void atualizarDados(Cliente cliente) throws SQLException {
+        PreparedStatement comando = null;
+        Connection conexao = null;
+        try {
+            conexao = BancoDadosUtil.getConnection();
+            comando = conexao.prepareStatement(SQL_UPDATE_DADOS);
+
+            comando.setString(1, cliente.getNome());
+            comando.setString(2, cliente.getTelefone());
+            comando.setString(3, cliente.getCPF());
+            comando.setString(4, cliente.getEndereco());
+            
+            comando.setInt(5, cliente.getCodigo());
+
+            comando.execute();
+            conexao.commit();
+        } catch (Exception e) {
+            if (conexao != null) {
+                conexao.rollback();
+            }
+            throw new RuntimeException();
+        } finally {
+            if (comando != null && !comando.isClosed()) {
+                comando.close();
+            }
+            if (conexao != null && !conexao.isClosed()) {
+                conexao.close();
+            }
+        }
     }
 
 }

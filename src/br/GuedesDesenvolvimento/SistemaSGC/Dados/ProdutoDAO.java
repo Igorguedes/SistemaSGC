@@ -22,6 +22,7 @@ public class ProdutoDAO {
 
     private static final String SQL_INSERT = "INSERT INTO PRODUTO (NOME, PRECO, QUANTIDADE) VALUES ( ?, ?, ?)";
     private static final String SQL_SELECT_TODOS = "SELECT CODIGO, NOME, PRECO, QUANTIDADE FROM PRODUTO ";
+    private static final String SQL_UPDATE_PRODUTO = "UPDATE PRODUTO SET NOME=?, PRECO = ?, QUANTIDADE = ? WHERE CODIGO = ?";
     
     public void criar(Produto produto) throws SQLException {
         Connection conexao = null;
@@ -95,5 +96,36 @@ public class ProdutoDAO {
         }
         return produtos;
     }
+    
+    public void atualizarDados(Produto produto) throws SQLException {
+        PreparedStatement comando = null;
+        Connection conexao = null;
+        try {
+            conexao = BancoDadosUtil.getConnection();
+            comando = conexao.prepareStatement(SQL_UPDATE_PRODUTO);
+            
+            comando.setString(1, produto.getNome());
+            comando.setDouble(2, produto.getPreco());
+            comando.setInt(3, produto.getQuantidade());
+            
+            comando.setInt(4, produto.getCodigo());
+            comando.execute();
+            conexao.commit();
+        } catch (Exception e) {
+            if (conexao != null) {
+                conexao.rollback();
+            }
+            throw new RuntimeException();
+        } finally {
+            if (comando != null && !comando.isClosed()) {
+                comando.close();
+            }
+            if (conexao != null && !conexao.isClosed()) {
+                conexao.close();
+            }
+        }
+    }
+
+    
 
 }

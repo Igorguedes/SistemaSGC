@@ -21,25 +21,23 @@ public class UsuarioBO {
     public void criar(Usuario usuario) {
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         List<Usuario> usuarios = new ArrayList<Usuario>();
-        Criptografia criptografia = new Criptografia();
 
         try {
 
             usuarios = usuarioDAO.buscarTodos();
-            Usuario usuarioComparar = new Usuario();
-            for (int i = 0; i < usuarios.size(); i++)    
+            Usuario usuarioComparar = null;
+            for (int i = 0; i < usuarios.size(); i++) {
                 usuarioComparar = usuarios.get(i);
-       
-            usuario.setSenha(criptografia.criptografiaSHA(usuario.getSenha()));
+            }
+                usuario.setSenha(Criptografia.criptografiaSHA(usuario.getSenha()));
                 if (!usuario.getNome().equals(usuarioComparar.getNome())) {
                     usuarioDAO.criar(usuario);
-                } else if (!usuario.getNome().equals(usuarioComparar.getNome()) && (!usuario.getSenha().equals(usuarioComparar.getSenha()))) {
+                } else if (usuario.getNome().equals(usuarioComparar.getNome()) && (usuario.getSenha().equals(usuarioComparar.getSenha()))) {
                     throw new UsuarioSenhaDiferentesException();
                 } else {
                     throw new UsuarioExisteException();
-
                 }
-
+            
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,6 +50,11 @@ public class UsuarioBO {
         List<Usuario> usuarios = usuarioDAO.buscarTodos();
         return usuarios;
 
+    }
+
+    public void atualizarDados(Usuario usuario) throws SQLException {
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        usuarioDAO.atualizarDados(usuario);
     }
 
 }

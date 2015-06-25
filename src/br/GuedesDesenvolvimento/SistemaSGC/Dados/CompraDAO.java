@@ -22,7 +22,8 @@ public class CompraDAO {
 
     private static final String SQL_INSERT = "INSERT INTO COMPRA (VALORTOTAL, DATA, CLIENTE,PRODUTO) VALUES ( ?, ?, ?,?)";
     private static final String SQL_SELECT_TODOS = "SELECT CODIGO, VALORTOTAL,DATA,CLIENTE, PRODUTO FROM COMPRA ";
-
+    private static final String SQL_UPDATE_DADOS = "UPDATE COMPRA SET  VALORTOTAL =? WHERE CODIGO=?";
+    
     public void criar(Compra compra) throws SQLException {
         Connection conexao = null;
         PreparedStatement comando = null;
@@ -35,6 +36,10 @@ public class CompraDAO {
 
             comando.setDouble(1, compra.getValorTotal());
             comando.setString(2, compra.getDataFormatadaBanco());
+            comando.setString(3, compra.getCliente().getNome());
+           
+            comando.setString(4, compra.getProdutos().toString());
+            
 
             comando.execute();
             conexao.commit();
@@ -101,6 +106,33 @@ public class CompraDAO {
             }
         }
         return compras;
+    }
+    
+    public void atualizarDados(Compra compra) throws SQLException {
+        PreparedStatement comando = null;
+        Connection conexao = null;
+        try {
+            conexao = BancoDadosUtil.getConnection();
+            comando = conexao.prepareStatement(SQL_UPDATE_DADOS);
+            
+            comando.setDouble(1, compra.getValorTotal());
+              
+            comando.setInt(2, compra.getCodigo());
+            comando.execute();
+            conexao.commit();
+        } catch (Exception e) {
+            if (conexao != null) {
+                conexao.rollback();
+            }
+            throw new RuntimeException();
+        } finally {
+            if (comando != null && !comando.isClosed()) {
+                comando.close();
+            }
+            if (conexao != null && !conexao.isClosed()) {
+                conexao.close();
+            }
+        }
     }
 
 }

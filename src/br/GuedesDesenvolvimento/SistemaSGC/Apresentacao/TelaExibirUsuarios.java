@@ -71,8 +71,18 @@ public class TelaExibirUsuarios extends javax.swing.JFrame {
         });
 
         btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         btnAlterar.setText("Alterar");
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlUsuariosCadastradosLayout = new javax.swing.GroupLayout(pnlUsuariosCadastrados);
         pnlUsuariosCadastrados.setLayout(pnlUsuariosCadastradosLayout);
@@ -118,6 +128,36 @@ public class TelaExibirUsuarios extends javax.swing.JFrame {
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
        this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
+
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+        int linhaSelecionada = tblUsuarios.getSelectedRow();
+        try {
+            if (linhaSelecionada < 0) {
+                JOptionPane.showMessageDialog(this, "Nenhum usuário selecionado!", "Erro!", JOptionPane.ERROR_MESSAGE);
+            } else {
+                Usuario usuarioSelecionado=usuarios.get(linhaSelecionada);
+                TelaEditarUsuario telaEditarUsuario = new TelaEditarUsuario(usuarioSelecionado);
+                telaEditarUsuario.setVisible(true);
+            
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
+    }//GEN-LAST:event_btnAlterarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        int linhaSelecionada = tblUsuarios.getSelectedRow();
+        Usuario usuarioSelecionado=usuarios.get(linhaSelecionada);
+        String mensagem="Deseja excluir? "+usuarioSelecionado.getNome();
+        String titulo="Excluir";
+        int resultado= JOptionPane.showConfirmDialog(this, mensagem, titulo, JOptionPane.YES_NO_OPTION); 
+        if(resultado==JOptionPane.YES_OPTION){
+            JOptionPane.showMessageDialog(this, "Usuario excluido com sucesso!");
+        }else if(resultado==JOptionPane.NO_OPTION){
+            
+        }
+    }//GEN-LAST:event_btnExcluirActionPerformed
 
     /**
      * @param args the command line arguments

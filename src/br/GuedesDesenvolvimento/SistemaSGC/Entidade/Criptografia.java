@@ -15,7 +15,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public class Criptografia {
     
-    public String converterHexadecimalParaString(byte[] valorHexadecimal){
+    public static String converterHexadecimalParaString(byte[] valorHexadecimal){
         StringBuilder valorConvertido = new StringBuilder();
         for(byte caracter: valorHexadecimal){
             valorConvertido.append(String.format("%02X",0xFF & caracter));
@@ -23,7 +23,7 @@ public class Criptografia {
         return valorConvertido.toString();
     }
     
-    public String criptografiaSHA(String texto) throws NoSuchAlgorithmException, UnsupportedEncodingException{
+    public static String criptografiaSHA(String texto) throws NoSuchAlgorithmException, UnsupportedEncodingException{
        
         MessageDigest algorotimo = MessageDigest.getInstance("SHA-256");
         byte[] codigoHashHexaDecimal = algorotimo.digest(texto.getBytes("UTF-8"));
