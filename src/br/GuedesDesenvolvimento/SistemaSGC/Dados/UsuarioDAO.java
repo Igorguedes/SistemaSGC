@@ -117,7 +117,7 @@ public class UsuarioDAO {
             }
         } catch (Exception e) {
             if (conexao != null) {
-                conexao.rollback();
+                conexao.rollback(); 
             }
             throw new RuntimeException();
         } finally {
