@@ -6,7 +6,6 @@
 package br.GuedesDesenvolvimento.SistemaSGC.Negocio;
 
 import br.GuedesDesenvolvimento.SistemaSGC.Dados.UsuarioDAO;
-import br.GuedesDesenvolvimento.SistemaSGC.Entidade.Criptografia;
 import br.GuedesDesenvolvimento.SistemaSGC.Entidade.Usuario;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,33 +21,24 @@ public class UsuarioBO {
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         List<Usuario> usuarios = new ArrayList<Usuario>();
 
-        try {
-
-            usuarios = usuarioDAO.buscarTodos();
-            Usuario usuarioComparar = null;
-            for (int i = 0; i < usuarios.size(); i++) {
-                usuarioComparar = usuarios.get(i);
-            }
-                usuario.setSenha(Criptografia.criptografiaSHA(usuario.getSenha()));
-                if (!usuario.getNome().equals(usuarioComparar.getNome())) {
-                    usuarioDAO.criar(usuario);
-                } else if (usuario.getNome().equals(usuarioComparar.getNome()) && (usuario.getSenha().equals(usuarioComparar.getSenha()))) {
-                    throw new UsuarioSenhaDiferentesException();
-                } else {
-                    throw new UsuarioExisteException();
-                }
-            
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     public List<Usuario> buscarTodos() throws SQLException {
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         List<Usuario> usuarios = usuarioDAO.buscarTodos();
         return usuarios;
+
+    }
+
+    public Usuario verificaUsuarioLogin(Usuario usuario) throws SQLException, ArgumentInvalidExeception {
+        Usuario usuarioExistente = null;
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        usuarioExistente = usuarioDAO.buscarLogin(usuario.getNome(), usuario.getSenha());
+        if (usuarioExistente != null) {
+            return usuarioExistente;
+        } else {
+            throw new RuntimeException();
+        }
 
     }
 

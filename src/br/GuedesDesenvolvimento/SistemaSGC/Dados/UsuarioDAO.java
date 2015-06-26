@@ -22,14 +22,13 @@ public class UsuarioDAO {
 
     private static final String SQL_INSERT = "INSERT INTO USUARIO    (NOME, CPF ,SENHA ) VALUES (  ?, ?,?)";
     private static final String SQL_SELECT_TODOS = "SELECT CODIGO, NOME,CPF,SENHA FROM USUARIO ";
+    private static final String SQL_SELECT_LOGIN = "SELECT * FROM NOME =? SENHA=?";
     private static final String SQL_UPDATE_DADOS = "UPDATE USUARIO SET  NOME = ?, SENHA=? WHERE CPF = ?";
-    
-     
+
     public void criar(Usuario usuario) throws SQLException {
         Connection conexao = null;
         PreparedStatement comando = null;
-
-        
+        Criptografia criptografia = new Criptografia();
 
         try {
 
@@ -38,7 +37,7 @@ public class UsuarioDAO {
 
             comando.setString(1, usuario.getNome());
             comando.setString(2, usuario.getCPF());
-            comando.setString(3, Criptografia.criptografiaSHA(usuario.getSenha()));
+            comando.setString(3, criptografia.criptografiaSHA(usuario.getSenha()));
 
             comando.execute();
             conexao.commit();
@@ -96,22 +95,57 @@ public class UsuarioDAO {
         return usuarios;
     }
 
+    public Usuario buscarLogin(String login, String senha) throws SQLException {
+        Usuario usuario = null;
+        PreparedStatement comando = null;
+        Connection conexao = null;
+        ResultSet resultado = null;
+        try {
+            conexao = BancoDadosUtil.getConnection();
+            comando = conexao.prepareStatement(SQL_SELECT_LOGIN);
+            comando.setString(1, login);
+            comando.setString(2, senha);
+
+            resultado = comando.executeQuery();
+
+            while (resultado.next()) {
+                usuario = new Usuario();
+
+                usuario.setNome(resultado.getString(1));
+                usuario.setCPF(resultado.getString(2));
+                usuario.setSenha(resultado.getString(3));
+            }
+        } catch (Exception e) {
+            if (conexao != null) {
+                conexao.rollback();
+            }
+            throw new RuntimeException();
+        } finally {
+            if (comando != null && !comando.isClosed()) {
+                comando.close();
+            }
+            if (conexao != null && !conexao.isClosed()) {
+                conexao.close();
+            }
+        }
+        return usuario;
+    }
+
     public void atualizarDados(Usuario usuario) throws SQLException {
         PreparedStatement comando = null;
         Connection conexao = null;
-        
-        
-         try {
+        Criptografia criptografia = new Criptografia();
+
+        try {
             conexao = BancoDadosUtil.getConnection();
             comando = conexao.prepareStatement(SQL_UPDATE_DADOS);
-            
-            
+
             comando.setString(1, usuario.getNome());
             comando.setString(2, usuario.getCPF());
-            comando.setString(3, Criptografia.criptografiaSHA(usuario.getSenha()));
-            
-            comando.setInt(4,usuario.getCodigo());
-            
+            comando.setString(3, criptografia.criptografiaSHA(usuario.getSenha()));
+
+            comando.setInt(4, usuario.getCodigo());
+
             comando.execute();
             conexao.commit();
         } catch (Exception e) {
@@ -129,4 +163,3 @@ public class UsuarioDAO {
         }
     }
 }
-    

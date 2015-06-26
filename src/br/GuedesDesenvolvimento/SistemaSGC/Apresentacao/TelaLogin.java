@@ -6,9 +6,13 @@
 package br.GuedesDesenvolvimento.SistemaSGC.Apresentacao;
 
 import br.GuedesDesenvolvimento.SistemaSGC.Entidade.Usuario;
+import br.GuedesDesenvolvimento.SistemaSGC.Negocio.ArgumentInvalidExeception;
 import br.GuedesDesenvolvimento.SistemaSGC.Negocio.UsuarioBO;
+
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -153,6 +157,8 @@ public class TelaLogin extends javax.swing.JFrame {
         } catch (SQLException ex) {
             exibirMensagemErro("Erro desconhecido! Procure o administrador do sistema!");
             ex.printStackTrace();
+        } catch (ArgumentInvalidExeception ex) {
+            Logger.getLogger(TelaLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
         
 
@@ -172,20 +178,14 @@ public class TelaLogin extends javax.swing.JFrame {
         }
     }
 
-    public boolean validarLogin() throws SQLException {
+    public boolean validarLogin() throws SQLException, ArgumentInvalidExeception {
 
         UsuarioBO usuarioBO = new UsuarioBO();
-        List<Usuario> usuarios = usuarioBO.buscarTodos();
-        Usuario usuarioCompara = null;
-
-        for (int i = 0; i < usuarios.size(); i++) {
-            usuarioCompara = usuarios.get(i);
-            if ((this.usuario.getNome().equals(usuarioCompara.getNome()) && (this.usuario.getSenha().equals(usuarioCompara.getSenha())))) {
-                exibirMensagemSucesso();
-            } else {
-                exibirMensagemErro("Usuário ou senhas incorretos! Verifique se a tecla CAPSLOOK está ativada!");
-                return false;
-            }
+        
+        try {      
+            usuarioBO.verificaUsuarioLogin(usuario);
+        } catch (ArgumentInvalidExeception ex) {
+            Logger.getLogger(TelaLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
         return true;
     }
